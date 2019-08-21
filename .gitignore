@@ -1,0 +1,14 @@
+*.DS_Store
+*.gz
+*.log
+
+.cache
+.npm
+.vscode
+
+logs
+node_modules
+public/build
+public/upload
+
+npm-debug.log
