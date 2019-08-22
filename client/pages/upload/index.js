@@ -26,7 +26,7 @@ class App extends Component {
 
   handleClick = () => {
     handleRestartDefault()
-    this.nodes.click()
+    this.check.click()
   }
 
   handleChange = f => {
@@ -43,6 +43,7 @@ class App extends Component {
     if (pass) {
       upload.state = 'stop'
       this.setState({ pass: false })
+      this.file.innerHTML = 'START'
 
       return false
     }
@@ -50,6 +51,7 @@ class App extends Component {
     if (!pass) {
       upload.state = 'start'
       this.setState({ pass: true })
+      this.file.innerHTML = 'STOP'
 
       if (upload.file) {
         prepareFile(upload.file)
@@ -100,9 +102,9 @@ class App extends Component {
           </div>
 
           <div className='submit'>
-            <input className='check-file' type="file" ref={e => { this.nodes = e }} onChange={e => this.handleChange(e.target.files)} />
+            <input className='check-file' type="file" ref={e => { this.check = e }} onChange={e => this.handleChange(e.target.files)} />
             <button className='click-file' type='button' onClick={this.handleClick}>Click This</button>
-            <div className='click-state' onClick={this.handleState} role='presentation'>stop</div>
+            <div className='click-state' ref={e => { this.file = e }} onClick={this.handleState} role='presentation'>STOP</div>
           </div>
         </div>
       </Layout>
