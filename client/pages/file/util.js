@@ -96,7 +96,7 @@ async function checkFile ({ file, token }) {
 
   let result = {}
 
-  await fetch(`/upload/check/file?token=${token}&type=${file.type}`, {
+  await fetch(`/upload/file/check?token=${token}&type=${file.type}`, {
     method: `get`,
   }).then(res => res.json())
     .then(res => {
@@ -228,7 +228,7 @@ async function uploadFile ({ file, key, token, chunks, callback }) {
   form.append('index', key)
   form.append('token', token)
 
-  await fetch(`/upload/upload/file`, {
+  await fetch(`/upload/file/upload`, {
     method: 'post',
     body: form,
   }).then(res => res.json())
@@ -246,7 +246,7 @@ async function queryFile ({ file, token }) {
     return false
   }
 
-  await fetch(`/upload/merge/file?token=${token}&type=${file.type}`, {
+  await fetch(`/upload/file/merge?token=${token}&type=${file.type}`, {
     method: 'get',
   }).then(res => res.json())
     .then(res => {

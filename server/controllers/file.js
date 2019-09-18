@@ -13,14 +13,14 @@ const paths = '../../public/upload'
 module.exports = {
   async home (ctx, next) {
     const result = {
-      title: 'upload practice',
+      title: 'upload file',
     }
 
     ctx.state = Object.assign({}, result, {
       config: JSON.stringify({ upload: { state: 'start', file: null } }),
     })
 
-    await ctx.render('upload')
+    await ctx.render('file')
     await next()
   },
 
@@ -64,7 +64,7 @@ module.exports = {
       result.code = 200
       result.index = index
     } catch (err) {
-      console.log(err)
+      console.error(err)
     } finally {
       ctx.body = result
     }
@@ -90,7 +90,7 @@ module.exports = {
 
       ctx.body = result
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   },
 }

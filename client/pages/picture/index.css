@@ -1,0 +1,22 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  padding: .5rem;
+}
+
+.demo {
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.demo .title {
+  font-size: .5rem;
+  text-transform: capitalize;
+}
+
+.demo .descr {
+  font-size: .3rem;
+}

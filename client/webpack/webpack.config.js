@@ -23,14 +23,14 @@ const config = {
     splitChunks: {
       cacheGroups: {
         vendors: {
+          name: 'vendors',
           test: /[\\/]node_modules[\\/]/,
-          chunks: 'initial',
+          chunks: 'all',
+          priority: 10,
         },
       },
     },
-    runtimeChunk: {
-      name: 'manifest',
-    },
+    runtimeChunk: true,
     minimizer: [
       new OptimizeCssAssetsPlugin(),
       new UglifyWebpackPlugin({ sourceMap: true }),
@@ -57,7 +57,7 @@ const config = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(),
+    // new CleanWebpackPlugin(),
   ],
 }
 
@@ -145,6 +145,7 @@ module.exports = (env, argv) => {
     config.output.publicPath = 'https://www.domain.com/static/'
     config.optimization.minimize = true
     config.plugins.push(compressionPlugin)
+    config.plugins.push(new CleanWebpackPlugin())
     // config.plugins.push(qiniuPlugin())
   } else {
     config.devtool = 'inline-source-map'

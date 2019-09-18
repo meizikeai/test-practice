@@ -8,8 +8,8 @@ const koaBody = require('koa-body')
 const logger = require('koa-logger')
 const onerror = require('koa-onerror')
 const path = require('path')
+const routerScheme = require('koa-router-scheme')
 const views = require('koa-views')
-const handleRouter = require('../bin/handle-router')
 
 const app = new Koa()
 
@@ -27,8 +27,8 @@ app.use(compress())
 
 // cors
 app.use(cors({
-  // origin: '*',
-  // methods: 'POST, GET, OPTIONS',
+  origin: '*',
+  methods: 'POST, GET, OPTIONS',
 }))
 
 // body, files
@@ -48,7 +48,7 @@ app.use(views(path.join(__dirname, '../views'), {
 }))
 
 // routes
-handleRouter(app)
+routerScheme({ app })
 
 // 404､403
 app.use(async (ctx, next) => {

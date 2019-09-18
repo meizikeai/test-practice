@@ -65,8 +65,8 @@ class App extends Component {
     return (
       <Layout {...layoutArgs}>
         <div className='demo'>
-          <h1 className='title'>upload practice</h1>
-          <p className='descr'>A upload practice and want to look for a girlfriend...</p>
+          <h1 className='title'>upload file</h1>
+          <p className='descr'>A upload file and want to look for a girlfriend...</p>
 
           <div className='upload'>
             <div className='one' id='one'>
