@@ -22,15 +22,13 @@ global.TestPractice = {}
 // error handler
 onerror(app)
 
-// json
-app.use(json())
-
 // logger
 app.use(logger({
-  winston: {
-    appName: 'test-practice',
-  },
+  appName: 'test-practice',
 }))
+
+// json
+app.use(json())
 
 app.use(helmet())
 
