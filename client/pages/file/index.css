@@ -1,0 +1,110 @@
+html,
+body {
+  height: 100%;
+}
+
+.demo {
+  margin: .5rem auto;
+  line-height: 1.5;
+}
+
+.demo .title {
+  font-size: .5rem;
+  text-transform: capitalize;
+}
+
+.demo .descr {
+  font-size: .3rem;
+}
+
+.upload {
+  font-size: .3rem;
+  padding: .3rem 0;
+}
+
+.upload .one {
+  display: none;
+}
+
+.upload .list {
+  display: flex;
+  line-height: 2.6;
+}
+
+.upload .list .topic {
+  width: 30%;
+}
+
+.upload .list .check {
+  width: 70%;
+}
+
+.upload .list .jump {
+  display: block;
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.upload .list .check div {
+  position: relative;
+  height: .3rem;
+  margin-top: 0.23rem;
+  background-color: rgb(51, 122, 183);
+  transition: width .3s ease;
+}
+
+.upload .list .check p {
+  height: .3rem;
+  line-height: 1.4;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  color: #fff;
+  font-size: .24rem;
+  margin-left: -.1rem;
+}
+
+.submit {
+  position: relative;
+  display: flex;
+}
+
+.submit .check-file {
+  height: .8rem;
+  width: 3rem;
+  border-radius: 3px;
+  background-color: #fff;
+  outline: none;
+  color: #666;
+  vertical-align: top;
+}
+
+.submit .click-file,
+.submit .click-state {
+  line-height: .8rem;
+  height: .8rem;
+  width: 3rem;
+  border: 1px solid #d9d9d9;
+  border-radius: 3px;
+  background-color: #fff;
+  outline: none;
+  color: #666;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-weight: 600;
+  font-size: .3rem;
+}
+
+.submit .click-file:hover,
+.submit .click-state:hover {
+  border: 1px solid #4595ec;
+  color: #4595ec;
+}
+
+.submit .click-state {
+  position: static;
+  margin-left: .3rem;
+  text-align: center;
+  vertical-align: top;
+}
