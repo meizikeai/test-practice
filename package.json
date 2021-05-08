@@ -36,7 +36,7 @@
     "core-js": "^3.6.5",
     "css-modules-require-hook": "^4.2.3",
     "debug": "^4.1.1",
-    "handlebars": "^4.7.6",
+    "handlebars": "^4.7.7",
     "koa": "^2.13.0",
     "koa-body": "^4.2.0",
     "koa-bodyparser": "^4.3.0",
