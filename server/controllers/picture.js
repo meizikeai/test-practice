@@ -4,7 +4,7 @@ const fs = require('fs')
 // const paths = '../../public/upload'
 
 module.exports = {
-  async home (ctx, next) {
+  async home(ctx, next) {
     const result = {
       title: 'upload practice',
     }
@@ -17,7 +17,7 @@ module.exports = {
     await next()
   },
 
-  async baseFile (ctx) {
+  async baseFile(ctx) {
     try {
       const result = { code: 400, message: '发生错误！' }
       const { base } = ctx.request.body
@@ -40,5 +40,4 @@ module.exports = {
       console.error(err)
     }
   },
-
 }

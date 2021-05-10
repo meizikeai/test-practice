@@ -1,4 +1,3 @@
-
 const fs = require('fs')
 const path = require('path')
 const crypto = require('crypto')
@@ -8,7 +7,7 @@ const crypto = require('crypto')
  * @param {String} paths 原地址
  * @param {String} target 新地址
  */
-function copyFiles (paths, target) {
+function copyFiles(paths, target) {
   let result = false
   try {
     fs.renameSync(paths, target)
@@ -25,14 +24,14 @@ function copyFiles (paths, target) {
  * 文件夹状态检查，创建文件夹
  * @param {String} folder 文件夹路径
  */
-function folderState (folder) {
+function folderState(folder) {
   let result = false
 
   try {
     const isStat = isExist({ filePath: folder, stats: 'directory' })
 
     if (!isStat) {
-      fs.mkdirSync(folder, error => {
+      fs.mkdirSync(folder, (error) => {
         if (error) {
           console.error(error)
           return false
@@ -55,7 +54,7 @@ function folderState (folder) {
  * 获取文件夹下的文件
  * @param {Object} filePath 文件夹路径
  */
-function getChunkFiles ({ folder, filePath }) {
+function getChunkFiles({ folder, filePath }) {
   const result = {
     chunk: [],
     code: 400,
@@ -78,7 +77,7 @@ function getChunkFiles ({ folder, filePath }) {
  * 返回文件夹下所有文件
  * @param {String} filePath 文件夹路径
  */
-function getFile (filePath) {
+function getFile(filePath) {
   return fs.readdirSync(filePath) || []
 }
 
@@ -86,7 +85,7 @@ function getFile (filePath) {
  * 检查文件夹状态
  * @param {String} filePath 文件夹路径
  */
-function isExist ({ filePath, stats }) {
+function isExist({ filePath, stats }) {
   let result = false
 
   try {
@@ -114,7 +113,7 @@ function isExist ({ filePath, stats }) {
  * @param {String} paths 相对路径
  * @param {String} name 文件名
  */
-function mergeFiles ({ folder, paths, name, check }) {
+function mergeFiles({ folder, paths, name, check }) {
   let { result, buffer, team } = { result: false, buffer: null, team: [] }
   const target = path.resolve(__dirname, paths, name)
 
@@ -126,7 +125,7 @@ function mergeFiles ({ folder, paths, name, check }) {
       team[i] = `${folder}/${team[i]}`
     }
 
-    buffer = team.map(f => fs.readFileSync(f))
+    buffer = team.map((f) => fs.readFileSync(f))
   } catch (err) {
     console.error(err)
     result = false
@@ -179,7 +178,7 @@ function mergeFiles ({ folder, paths, name, check }) {
  * 可上传文件的type
  * @param {String} type 文件的type
  */
-function getFileExt (type) {
+function getFileExt(type) {
   const data = {
     'application/pdf': '.pdf',
     'application/vnd.openxmlformats-officedocument.presentationml.presentation': '.pptx',
@@ -201,7 +200,7 @@ function getFileExt (type) {
  * 返回文件的后缀
  * @param {String} type 文件的type
  */
-function matchFileType (type) {
+function matchFileType(type) {
   // .pdf
   // .pptx
   // .xlsx

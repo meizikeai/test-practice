@@ -13,23 +13,21 @@ const layoutArgs = {
 const { upload } = window.CONFIG
 
 class App extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       pass: true,
     }
   }
 
-  componentDidMount () {
-
-  }
+  // componentDidMount() { }
 
   handleClick = () => {
     handleRestartDefault()
     this.check.click()
   }
 
-  handleChange = f => {
+  handleChange = (f) => {
     const file = f[0]
     if (file) {
       upload.file = file
@@ -61,7 +59,7 @@ class App extends Component {
     }
   }
 
-  render () {
+  render() {
     return (
       <Layout {...layoutArgs}>
         <div className='demo'>
@@ -102,9 +100,27 @@ class App extends Component {
           </div>
 
           <div className='submit'>
-            <input className='check-file' type="file" ref={e => { this.check = e }} onChange={e => this.handleChange(e.target.files)} />
-            <button className='click-file' type='button' onClick={this.handleClick}>Click This</button>
-            <div className='click-state' ref={e => { this.file = e }} onClick={this.handleState} role='presentation'>STOP</div>
+            <input
+              className='check-file'
+              type='file'
+              ref={(e) => {
+                this.check = e
+              }}
+              onChange={(e) => this.handleChange(e.target.files)}
+            />
+            <button className='click-file' type='button' onClick={this.handleClick}>
+              Click This
+            </button>
+            <div
+              className='click-state'
+              ref={(e) => {
+                this.file = e
+              }}
+              onClick={this.handleState}
+              role='presentation'
+            >
+              STOP
+            </div>
           </div>
         </div>
       </Layout>

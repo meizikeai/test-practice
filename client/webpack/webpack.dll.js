@@ -9,20 +9,22 @@ const { qiniu } = require('./config')
 module.exports = {
   mode: 'production',
   entry: {
-    vendors: [
-      'react',
-      'react-dom',
-      'react-router',
-      'react-router-dom',
-      'prop-types',
-      'node-fetch',
-    ],
+    vendors: ['react', 'react-dom', 'react-router', 'react-router-dom', 'prop-types', 'whatwg-fetch'],
   },
   output: {
     filename: '[name].[hash].dll.js',
     library: '[name]_[hash]',
     path: path.resolve(__dirname, '../../public/dll'),
     publicPath: `${qiniu.cdnBase}/web/static/`,
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -34,9 +36,9 @@ module.exports = {
     }),
 
     new CompressionWebpackPlugin({
-      filename: '[path].gz[query]',
+      filename: '[path][base].gz',
       algorithm: 'gzip',
-      test: /\.js$|\.html$|\.css$/,
+      test: /\.js$|\.css$|\.html$/,
       threshold: 10240,
       minRatio: 0.8,
     }),
@@ -46,12 +48,7 @@ module.exports = {
       SECRET_KEY: qiniu.secretKey,
       bucket: qiniu.bucket,
       path: 'web/static/',
-      include: [
-        /\.js$/,
-        /\.js.gz$/,
-        /\.css$/,
-        /\.css.gz$/,
-      ],
+      include: [/\.js$/, /\.js.gz$/, /\.css$/, /\.css.gz$/],
     }),
   ],
 }

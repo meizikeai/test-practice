@@ -1,5 +1,5 @@
 const logger = require('lucky-logger')
 
 module.exports = logger({
-  appName: 'koa-practice',
+  appName: 'test-practice',
 })

@@ -2,9 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const glob = require('glob')
 const webpack = require('webpack')
-const Autoprefixer = require('autoprefixer')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
-// const HTMLInlineCSSWebpackPlugin = require('html-inline-css-webpack-plugin').default
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -13,6 +11,8 @@ const QiniuPlugin = require('qiniu-webpack-plugin')
 const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { dll, isDirectory, manifest, qiniu } = require('./config')
+
+const environment = ['core-js/es/map', 'core-js/es/set']
 
 const config = {
   stats: {
@@ -44,15 +44,12 @@ const config = {
       },
     },
     runtimeChunk: true,
-    minimizer: [
-      new OptimizeCssAssetsPlugin(),
-      new UglifyWebpackPlugin({ sourceMap: true, parallel: true }),
-    ],
+    minimizer: [new OptimizeCssAssetsPlugin()],
   },
   module: {
     rules: [
       {
-        test: /(\.jsx|\.js)$/,
+        test: /\.(js|jsx)$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
       },
@@ -64,9 +61,9 @@ const config = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [
-                Autoprefixer,
-              ],
+              postcssOptions: {
+                plugins: [['autoprefixer']],
+              },
             },
           },
           'sass-loader',
@@ -78,15 +75,13 @@ const config = {
     // jquery: 'jQuery',
   },
   resolve: {
-    alias: {
-      '@components': path.resolve(__dirname, '../components'),
-      '@utils': path.resolve(__dirname, '../utils'),
-    },
-    extensions: ['.js', '.jsx', '.json'],
+    // alias: {
+    //   '@components': path.resolve(__dirname, '../components'),
+    //   '@utils': path.resolve(__dirname, '../utils'),
+    // },
+    // extensions: ['.js', '.jsx', '.json'],
   },
-  plugins: [
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-  ],
+  plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)],
 }
 
 const miniCssPlugin = new MiniCssExtractPlugin({
@@ -95,9 +90,9 @@ const miniCssPlugin = new MiniCssExtractPlugin({
 })
 
 const compressionPlugin = new CompressionWebpackPlugin({
-  filename: '[path].gz[query]',
+  filename: '[path][base].gz',
   algorithm: 'gzip',
-  test: /\.js$|\.html$|\.css$/,
+  test: /\.js$|\.css$|\.html$/,
   threshold: 10240,
   minRatio: 0.8,
 })
@@ -107,17 +102,12 @@ const qiniuPlugin = new QiniuPlugin({
   SECRET_KEY: qiniu.secretKey,
   bucket: qiniu.bucket,
   path: 'web/static/',
-  include: [
-    /\.js$/,
-    /\.js.gz$/,
-    /\.css$/,
-    /\.css.gz$/,
-  ],
+  include: [/\.js$/, /\.js.gz$/, /\.css$/, /\.css.gz$/],
 })
 
-const handleHtmlWebpackPlugin = paths => {
-  const result = paths.map(data => {
-    const name = data.replace(/~/ig, '/')
+const htmlWebpack = (paths) => {
+  const result = paths.map((data) => {
+    const name = data.replace(/~/gi, '/')
     const userFile = path.resolve(__dirname, `../pages/${name}/index.hbs`)
     const defaultFile = path.resolve(__dirname, '../templates/index.hbs')
     const filter = fs.existsSync(userFile)
@@ -142,37 +132,53 @@ const handleHtmlWebpackPlugin = paths => {
   return result
 }
 
+const uglifyWebpack = (mode) => {
+  const option = {
+    cache: true,
+    parallel: true,
+    sourceMap: true,
+  }
+
+  if (mode === 'production') {
+    option.uglifyOptions = {
+      compress: {
+        drop_console: true,
+      },
+    }
+  }
+
+  return new UglifyWebpackPlugin(option)
+}
+
 module.exports = (env, argv) => {
   const entry = {}
 
   if (env.all === 'true') {
-    const base = [
-      path.resolve(__dirname, '../pages/*/index.js'),
-      path.resolve(__dirname, '../pages/*/*/index.js'),
-    ]
+    const base = [path.resolve(__dirname, '../pages/*/index.js'), path.resolve(__dirname, '../pages/*/*/index.js')]
 
-    base.forEach(data => {
+    base.forEach((data) => {
       const pathList = glob.sync(path.resolve(__dirname, data))
 
-      pathList.forEach(item => {
+      pathList.forEach((item) => {
         const tplPath = `${item.split('/pages/')[1].split('/index.js')[0]}`
-        const page = tplPath.replace(/\//ig, '~')
+        const page = tplPath.replace(/\//gi, '~')
 
-        entry[page] = item
+        entry[page] = environment.concat([item])
       })
     })
   } else {
-    const page = env.p.replace(/\//ig, '~')
+    const page = env.p.replace(/\//gi, '~')
     const dir = path.resolve(__dirname, `../pages/${env.p}`)
 
-    entry[page] = isDirectory(dir) ? `${dir}/index.js` : `${dir}.js`
+    entry[page] = isDirectory(dir) ? environment.concat([`${dir}/index.js`]) : environment.concat([`${dir}.js`])
   }
 
   config.entry = entry
   config.plugins.push(miniCssPlugin)
-  config.plugins.push(...handleHtmlWebpackPlugin(env.all === 'true' ? Object.keys(entry) : [env.p.replace(/\//ig, '~')]))
+  config.plugins.push(...htmlWebpack(env.all === 'true' ? Object.keys(entry) : [env.p.replace(/\//gi, '~')]))
+  config.optimization.minimizer.push(uglifyWebpack(argv.mode))
 
-  dll.forEach(file => {
+  dll.forEach((file) => {
     const tags = {
       append: false,
       tags: file,
@@ -185,10 +191,12 @@ module.exports = (env, argv) => {
     config.plugins.push(new HtmlWebpackTagsPlugin(tags))
   })
 
-  manifest.forEach(file => {
-    config.plugins.push(new webpack.DllReferencePlugin({
-      manifest: path.resolve(__dirname, '../../public/dll', file),
-    }))
+  manifest.forEach((file) => {
+    config.plugins.push(
+      new webpack.DllReferencePlugin({
+        manifest: path.resolve(__dirname, '../../public/dll', file),
+      })
+    )
   })
 
   if (argv.mode === 'production') {
@@ -197,22 +205,13 @@ module.exports = (env, argv) => {
     config.optimization.minimize = true
     config.plugins.push(new CleanWebpackPlugin())
     config.plugins.push(compressionPlugin)
-    // config.plugins.push(new HTMLInlineCSSWebpackPlugin())
     config.plugins.push(qiniuPlugin)
   } else {
     config.devtool = 'inline-source-map'
     config.watch = true
     config.watchOptions = {
       aggregateTimeout: 300,
-      ignored: [
-        'build',
-        'logs',
-        'node_modules',
-        'pm2',
-        'public',
-        'server',
-        'views',
-      ],
+      ignored: ['build', 'logs', 'node_modules', 'pm2', 'public', 'server', 'views'],
     }
   }
 

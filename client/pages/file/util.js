@@ -3,7 +3,7 @@ import PopupMinLayer from '../../components/popup-min-layer'
 
 let isUpload = 0
 
-async function prepareFile (file) {
+async function prepareFile(file) {
   // 第零步：检查类型
   const inFileType = testFileType(file.type)
 
@@ -34,7 +34,7 @@ async function prepareFile (file) {
   await queryFile({ file, token })
 }
 
-function extractFile (file) {
+function extractFile(file) {
   const one = document.querySelector('#one')
   one.style.display = 'block'
 
@@ -50,7 +50,7 @@ function extractFile (file) {
 
     let currentChunk = 0
 
-    fileReader.onload = e => {
+    fileReader.onload = (e) => {
       spark.append(e.target.result)
       currentChunk += 1
 
@@ -87,7 +87,7 @@ function extractFile (file) {
   })
 }
 
-async function checkFile ({ file, token }) {
+async function checkFile({ file, token }) {
   const inFileType = testFileType(file.type)
 
   if (inFileType) {
@@ -98,18 +98,20 @@ async function checkFile ({ file, token }) {
 
   await fetch(`/upload/file/check?token=${token}&type=${file.type}`, {
     method: `get`,
-  }).then(res => res.json())
-    .then(res => {
+  })
+    .then((res) => res.json())
+    .then((res) => {
       result = res
       console.log('2. check file finished.')
-    }).catch(error => {
+    })
+    .catch((error) => {
       console.log(error)
     })
 
   return result
 }
 
-async function sliceAndUploadFile ({ file, token, list }) {
+async function sliceAndUploadFile({ file, token, list }) {
   isUpload = list.length
   const chunkSize = getThunkSize()
   const chunks = Math.ceil(file.size / chunkSize)
@@ -164,14 +166,7 @@ async function sliceAndUploadFile ({ file, token, list }) {
   return result
 }
 
-async function handleStack ({
-  stack,
-  file,
-  token,
-  chunks,
-  uploadNode,
-  uploadText,
-}) {
+async function handleStack({ stack, file, token, chunks, uploadNode, uploadText }) {
   if (stack.length <= 0) {
     isUpload = 0
     return false
@@ -182,7 +177,7 @@ async function handleStack ({
     key: stack[0],
     token,
     chunks,
-    callback: async res => {
+    callback: async (res) => {
       if (res.code === 200) {
         const { upload } = window.CONFIG
 
@@ -218,7 +213,7 @@ async function handleStack ({
   }
 }
 
-async function uploadFile ({ file, key, token, chunks, callback }) {
+async function uploadFile({ file, key, token, chunks, callback }) {
   const chunkSize = getThunkSize()
   const end = (key + 1) * chunkSize >= file.size ? file.size : (key + 1) * chunkSize
   const form = new FormData()
@@ -231,15 +226,17 @@ async function uploadFile ({ file, key, token, chunks, callback }) {
   await fetch(`/upload/file/upload`, {
     method: 'post',
     body: form,
-  }).then(res => res.json())
-    .then(async res => {
+  })
+    .then((res) => res.json())
+    .then(async (res) => {
       await callback(res)
-    }).catch(error => {
+    })
+    .catch((error) => {
       console.error(error)
     })
 }
 
-async function queryFile ({ file, token }) {
+async function queryFile({ file, token }) {
   const inFileType = testFileType(file.type)
 
   if (inFileType) {
@@ -248,20 +245,21 @@ async function queryFile ({ file, token }) {
 
   await fetch(`/upload/file/merge?token=${token}&type=${file.type}`, {
     method: 'get',
-  }).then(res => res.json())
-    .then(res => {
+  })
+    .then((res) => res.json())
+    .then((res) => {
       handleRealUploaded(res.file)
       console.log('4. query file finished.')
       console.log('---')
     })
 }
 
-function getThunkSize () {
+function getThunkSize() {
   // return 5 * 1024 * 1024
   return 50 * 1024
 }
 
-function testFileType (type) {
+function testFileType(type) {
   const res = matchFileType(type)
 
   if (!res) {
@@ -276,7 +274,7 @@ function testFileType (type) {
   }
 }
 
-function matchFileType (type) {
+function matchFileType(type) {
   // .pdf
   // .pptx
   // .xlsx
@@ -304,7 +302,7 @@ function matchFileType (type) {
   ].includes(type)
 }
 
-function handleRealUploaded (file) {
+function handleRealUploaded(file) {
   const three = document.querySelector('#three')
   three.style.display = 'block'
   const check = three.querySelector('.jump')
@@ -312,7 +310,7 @@ function handleRealUploaded (file) {
   check.href = `${location.protocol}//${location.host}/${file}`
 }
 
-function handleRestartDefault () {
+function handleRestartDefault() {
   const one = document.querySelector('#one')
   one.style.display = 'none'
   const extract = one.querySelector('#extract')
@@ -334,17 +332,9 @@ function handleRestartDefault () {
   check.href = ''
 }
 
-function handleProceedNext ({
-  blobSlice,
-  chunkSize,
-  currentChunk,
-  extract,
-  extractText,
-  file,
-  fileReader,
-}) {
+function handleProceedNext({ blobSlice, chunkSize, currentChunk, extract, extractText, file, fileReader }) {
   const start = currentChunk * chunkSize
-  const end = ((start + chunkSize) >= file.size) ? file.size : start + chunkSize
+  const end = start + chunkSize >= file.size ? file.size : start + chunkSize
 
   fileReader.readAsArrayBuffer(blobSlice.call(file, start, end))
 
@@ -352,7 +342,4 @@ function handleProceedNext ({
   extractText.innerHTML = `${currentChunk + 1}%`
 }
 
-export {
-  prepareFile,
-  handleRestartDefault,
-}
+export { prepareFile, handleRestartDefault }

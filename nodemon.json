@@ -1,6 +1,6 @@
 {
   "events": {
-    "restart": "osascript -e 'display notification \"koa-practice restarted\" with title \"nodemon\"'"
+    "restart": "osascript -e 'display notification \"test-practice restarted\" with title \"nodemon\"'"
   },
   "ext": "ts tsx js json",
   "ignore": [

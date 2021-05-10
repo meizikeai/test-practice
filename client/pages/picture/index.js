@@ -1,35 +1,30 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 import Layout from '../../components/layout'
-import { } from './util'
 import './index.css'
 
 const { upload } = window.CONFIG
 
 class App extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
-    this.state = {
-
-    }
+    this.state = {}
   }
 
-  componentDidMount () {
-
-  }
+  // componentDidMount() { }
 
   handleClick = () => {
     this.check.click()
   }
 
-  handleChange = f => {
+  handleChange = (f) => {
     const file = f[0]
     if (file) {
       upload.file = file
     }
   }
 
-  render () {
+  render() {
     return (
       <Layout>
         <div className='demo'>

@@ -1,4 +1,4 @@
-function AvatarUpload (options) {
+function AvatarUpload(options) {
   let recordObject = null
 
   const CreateAvatar = function () {
@@ -12,7 +12,7 @@ function AvatarUpload (options) {
      * @param null
      * @return null
      */
-    init () {
+    init() {
       this.product = ''
       this.handleInfo()
       this.createNode()
@@ -24,7 +24,7 @@ function AvatarUpload (options) {
      * @param null
      * @return null
      */
-    handleInfo () {
+    handleInfo() {
       const self = this
 
       self.defaults = {
@@ -34,7 +34,7 @@ function AvatarUpload (options) {
         initial: '',
         barHeight: 50,
         scale: 1,
-        callback (data) {
+        callback(data) {
           // console.log(data)
         },
       }
@@ -72,35 +72,36 @@ function AvatarUpload (options) {
      * @param null
      * @return null
      */
-    createNode () {
+    createNode() {
       const self = this
 
       const { defaults } = self
       const template = document.createElement('div')
 
       template.className = 'avatar-updata'
-      template.innerHTML = '<div class="avatar-box">'
+      template.innerHTML =
+        '<div class="avatar-box">' +
         // '    <div class="avatar-head">设置头像</div>' +
-        + '    <div class="avatar-main">'
-        + '        <div class="avatar-love"></div>'
-        + '    </div>'
-        + '    <div class="avatar-tips"></div>'
-        + '    <div class="avatar-foot">'
-        + '        <div class="left"><span class="avatar-select">选择图片</span></div>'
-        + '        <div class="right"><span class="avatar-finished">裁剪图片</span></div>'
-        + '        <input type="file" class="avatar-select-file" accept="image/*" capture="camera" />'
-        + '    </div>'
-        + '</div>'
-        + '<div class="avatar-cure">'
-        + '    <h3>裁切的图片</h3>'
-        + '    <div>'
-        + '        <img src="" alt="" />'
-        + '    </div>'
-        + '</div>'
-        + '<a class="avatar-url" href="" target="_blank"></a>'
-        + '<div class="avatar-submit">'
-        + '    <button class="avatar-file" type="button">Click This</button>'
-        + '</div>'
+        '    <div class="avatar-main">' +
+        '        <div class="avatar-love"></div>' +
+        '    </div>' +
+        '    <div class="avatar-tips"></div>' +
+        '    <div class="avatar-foot">' +
+        '        <div class="left"><span class="avatar-select">选择图片</span></div>' +
+        '        <div class="right"><span class="avatar-finished">裁剪图片</span></div>' +
+        '        <input type="file" class="avatar-select-file" accept="image/*" capture="camera" />' +
+        '    </div>' +
+        '</div>' +
+        '<div class="avatar-cure">' +
+        '    <h3>裁切的图片</h3>' +
+        '    <div>' +
+        '        <img src="" alt="" />' +
+        '    </div>' +
+        '</div>' +
+        '<a class="avatar-url" href="" target="_blank"></a>' +
+        '<div class="avatar-submit">' +
+        '    <button class="avatar-file" type="button">Click This</button>' +
+        '</div>'
 
       document.body.appendChild(template)
 
@@ -176,7 +177,7 @@ function AvatarUpload (options) {
      * @param null
      * @return null
      */
-    bindEvent () {
+    bindEvent() {
       const self = this
       const AddListener = function (el, type, fn, capture) {
         if (el && el.addEventListener) {
@@ -191,7 +192,7 @@ function AvatarUpload (options) {
       const selectfile = self.avatarbox.querySelector('.avatar-select-file')
 
       // 触控移动
-      AddListener(self.avatarlove, 'touchstart', e => {
+      AddListener(self.avatarlove, 'touchstart', (e) => {
         e.preventDefault()
 
         const touches = e.changedTouches[0]
@@ -200,17 +201,20 @@ function AvatarUpload (options) {
         self.start.y = parseInt(touches.clientY)
 
         if (e.touches.length > 1) {
-          self.distance.start = self.getDistance({
-            x: e.touches[0].screenX,
-            y: e.touches[0].screenY,
-          }, {
-            x: e.touches[1].screenX,
-            y: e.touches[1].screenY,
-          })
+          self.distance.start = self.getDistance(
+            {
+              x: e.touches[0].screenX,
+              y: e.touches[0].screenY,
+            },
+            {
+              x: e.touches[1].screenX,
+              y: e.touches[1].screenY,
+            }
+          )
         }
       })
 
-      AddListener(self.avatarlove, 'touchmove', e => {
+      AddListener(self.avatarlove, 'touchmove', (e) => {
         e.preventDefault()
 
         self.twotouch = false
@@ -255,13 +259,16 @@ function AvatarUpload (options) {
 
           touches = e.touches
 
-          self.distance.stop = self.getDistance({
-            x: touches[0].screenX,
-            y: touches[0].screenY,
-          }, {
-            x: touches[1].screenX,
-            y: touches[1].screenY,
-          })
+          self.distance.stop = self.getDistance(
+            {
+              x: touches[0].screenX,
+              y: touches[0].screenY,
+            },
+            {
+              x: touches[1].screenX,
+              y: touches[1].screenY,
+            }
+          )
 
           let scale = self.distance.stop / self.distance.start
 
@@ -304,7 +311,7 @@ function AvatarUpload (options) {
         }
       })
 
-      AddListener(self.avatarlove, 'touchend', e => {
+      AddListener(self.avatarlove, 'touchend', (e) => {
         if (self.twotouch) {
           const size = self.avatarcrop.style.backgroundSize
           const bgsize = size.split(' ')
@@ -350,7 +357,7 @@ function AvatarUpload (options) {
         self.collectPicture()
       })
 
-      AddListener(selectfile, 'change', e => {
+      AddListener(selectfile, 'change', (e) => {
         const file = e.target.files[0]
 
         // 用户可能取消操作
@@ -413,7 +420,7 @@ function AvatarUpload (options) {
             },
             method: 'post',
             url: '/upload/picture/file',
-            callback: res => {
+            callback: (res) => {
               const result = JSON.parse(res)
               self.avatarurl.href = result.data
               self.avatarurl.innerHTML = `${location.protocol}//${location.host}${result.data}`
@@ -429,7 +436,7 @@ function AvatarUpload (options) {
      * @param source {node} 节点
      * @return null
      */
-    resetPicture (source) {
+    resetPicture(source) {
       const self = this
       const { defaults } = self
 
@@ -472,7 +479,7 @@ function AvatarUpload (options) {
      * @param source {node} 节点 / quality {String}
      * @return img.src
      */
-    compressPicture (source) {
+    compressPicture(source) {
       const self = this
       const { defaults } = self
       const MaxW = defaults.width * 2
@@ -519,7 +526,7 @@ function AvatarUpload (options) {
      * @param null
      * @return Picture.toDataURL
      */
-    collectPicture () {
+    collectPicture() {
       const self = this
       const { picture } = self
       const { defaults } = self
@@ -541,10 +548,10 @@ function AvatarUpload (options) {
       canvasContext.fillStyle = '#eee'
       canvasContext.fillRect(0, 0, canvas.width, canvas.height)
 
-      const cx = (defaults.width * 0.5 - defaults.circular - place.gx) * picture.width / place.gw
-      const cy = (defaults.height * 0.5 - defaults.circular - place.gy) * picture.height / place.gh
-      const cw = defaults.circular * 2 * picture.width / place.gw
-      const ch = defaults.circular * 2 * picture.height / place.gh
+      const cx = ((defaults.width * 0.5 - defaults.circular - place.gx) * picture.width) / place.gw
+      const cy = ((defaults.height * 0.5 - defaults.circular - place.gy) * picture.height) / place.gh
+      const cw = (defaults.circular * 2 * picture.width) / place.gw
+      const ch = (defaults.circular * 2 * picture.height) / place.gh
 
       let nx = 0
       let ny = 0
@@ -587,10 +594,16 @@ function AvatarUpload (options) {
         }
       }
 
-      dx = (cx < 0 ? -cx : 0) * place.gw / picture.width
-      dy = (cy < 0 ? -cy : 0) * place.gh / picture.height
-      dw = (nw * place.gw / picture.width < defaults.circular * 2 ? nw * place.gw / picture.width : defaults.circular * 2)
-      dh = (nh * place.gh / picture.height < defaults.circular * 2 ? nh * place.gh / picture.height : defaults.circular * 2)
+      dx = ((cx < 0 ? -cx : 0) * place.gw) / picture.width
+      dy = ((cy < 0 ? -cy : 0) * place.gh) / picture.height
+      dw =
+        (nw * place.gw) / picture.width < defaults.circular * 2
+          ? (nw * place.gw) / picture.width
+          : defaults.circular * 2
+      dh =
+        (nh * place.gh) / picture.height < defaults.circular * 2
+          ? (nh * place.gh) / picture.height
+          : defaults.circular * 2
 
       canvasContext.drawImage(picture, nx, ny, nw, nh, dx, dy, dw, dh)
 
@@ -617,7 +630,7 @@ function AvatarUpload (options) {
      * @param picture {node} 节点
      * @return null
      */
-    createDesk (picture) {
+    createDesk(picture) {
       const self = this
       const { defaults } = self
       const avatarmask = document.createElement('div')
@@ -630,10 +643,7 @@ function AvatarUpload (options) {
       canvasmask.className = 'canvas-mask'
       avatarcrop.className = 'avatar-crop'
 
-      avatarcrop.style.cssText = `width:${defaults.width
-      }px;height:${defaults.height
-      }px;background-image:url(${picture.src});background-size:${picture.width}px ${picture.height
-      }px;background-position:0px 0px;background-repeat:no-repeat;`
+      avatarcrop.style.cssText = `width:${defaults.width}px;height:${defaults.height}px;background-image:url(${picture.src});background-size:${picture.width}px ${picture.height}px;background-position:0px 0px;background-repeat:no-repeat;`
 
       avatarmask.appendChild(canvasmask)
 
@@ -661,7 +671,12 @@ function AvatarUpload (options) {
 
       // 实心矩形
       canvasdraw.beginPath()
-      canvasdraw.rect((defaults.width - defaults.circular * 2) * 0.5, (defaults.height - defaults.circular * 2) * 0.5, defaults.circular * 2, defaults.circular * 2) // 矩形选框
+      canvasdraw.rect(
+        (defaults.width - defaults.circular * 2) * 0.5,
+        (defaults.height - defaults.circular * 2) * 0.5,
+        defaults.circular * 2,
+        defaults.circular * 2
+      ) // 矩形选框
       canvasdraw.fill()
       canvasdraw.closePath()
 
@@ -670,29 +685,58 @@ function AvatarUpload (options) {
       canvasdraw.beginPath()
       canvasdraw.lineWidth = 1 // 外框
       canvasdraw.strokeStyle = '#fff' // 外框
-      canvasdraw.strokeRect((defaults.width - defaults.circular * 2) * 0.5, (defaults.height - defaults.circular * 2) * 0.5, defaults.circular * 2, defaults.circular * 2) // 矩形选框
+      canvasdraw.strokeRect(
+        (defaults.width - defaults.circular * 2) * 0.5,
+        (defaults.height - defaults.circular * 2) * 0.5,
+        defaults.circular * 2,
+        defaults.circular * 2
+      ) // 矩形选框
       canvasdraw.fill()
       canvasdraw.closePath()
 
       // 绘制线条
       canvasdraw.beginPath()
-      canvasdraw.moveTo((defaults.width - defaults.circular * 2) * 0.5 + defaults.circular * 2 / 3 + 0.5, (defaults.height - defaults.circular * 2) * 0.5)
-      canvasdraw.lineTo((defaults.width - defaults.circular * 2) * 0.5 + defaults.circular * 2 / 3 + 0.5, (defaults.height - defaults.circular * 2) * 0.5 + defaults.circular * 2) // 竖线1
-      canvasdraw.moveTo((defaults.width - defaults.circular * 2) * 0.5 + 2 * defaults.circular * 2 / 3 + 0.5, (defaults.height - defaults.circular * 2) * 0.5)
-      canvasdraw.lineTo((defaults.width - defaults.circular * 2) * 0.5 + 2 * defaults.circular * 2 / 3 + 0.5, (defaults.height - defaults.circular * 2) * 0.5 + defaults.circular * 2) // 竖线2
-      canvasdraw.moveTo((defaults.width - defaults.circular * 2) * 0.5, (defaults.height - defaults.circular * 2) * 0.5 + defaults.circular * 2 / 3 + 0.5)
-      canvasdraw.lineTo((defaults.width - defaults.circular * 2) * 0.5 + defaults.circular * 2, (defaults.height - defaults.circular * 2) * 0.5 + defaults.circular * 2 / 3 + 0.5) // 竖线2
-      canvasdraw.moveTo((defaults.width - defaults.circular * 2) * 0.5, (defaults.height - defaults.circular * 2) * 0.5 + 2 * defaults.circular * 2 / 3 + 0.5)
-      canvasdraw.lineTo((defaults.width - defaults.circular * 2) * 0.5 + defaults.circular * 2, (defaults.height - defaults.circular * 2) * 0.5 + 2 * defaults.circular * 2 / 3 + 0.5) // 竖线2
+      canvasdraw.moveTo(
+        (defaults.width - defaults.circular * 2) * 0.5 + (defaults.circular * 2) / 3 + 0.5,
+        (defaults.height - defaults.circular * 2) * 0.5
+      )
+      canvasdraw.lineTo(
+        (defaults.width - defaults.circular * 2) * 0.5 + (defaults.circular * 2) / 3 + 0.5,
+        (defaults.height - defaults.circular * 2) * 0.5 + defaults.circular * 2
+      ) // 竖线1
+      canvasdraw.moveTo(
+        (defaults.width - defaults.circular * 2) * 0.5 + (2 * defaults.circular * 2) / 3 + 0.5,
+        (defaults.height - defaults.circular * 2) * 0.5
+      )
+      canvasdraw.lineTo(
+        (defaults.width - defaults.circular * 2) * 0.5 + (2 * defaults.circular * 2) / 3 + 0.5,
+        (defaults.height - defaults.circular * 2) * 0.5 + defaults.circular * 2
+      ) // 竖线2
+      canvasdraw.moveTo(
+        (defaults.width - defaults.circular * 2) * 0.5,
+        (defaults.height - defaults.circular * 2) * 0.5 + (defaults.circular * 2) / 3 + 0.5
+      )
+      canvasdraw.lineTo(
+        (defaults.width - defaults.circular * 2) * 0.5 + defaults.circular * 2,
+        (defaults.height - defaults.circular * 2) * 0.5 + (defaults.circular * 2) / 3 + 0.5
+      ) // 竖线2
+      canvasdraw.moveTo(
+        (defaults.width - defaults.circular * 2) * 0.5,
+        (defaults.height - defaults.circular * 2) * 0.5 + (2 * defaults.circular * 2) / 3 + 0.5
+      )
+      canvasdraw.lineTo(
+        (defaults.width - defaults.circular * 2) * 0.5 + defaults.circular * 2,
+        (defaults.height - defaults.circular * 2) * 0.5 + (2 * defaults.circular * 2) / 3 + 0.5
+      ) // 竖线2
       canvasdraw.stroke()
       canvasdraw.closePath()
     },
-    handleAlert (value) {
+    handleAlert(value) {
       const self = this
       self.avatartips.innerHTML = value
       self.avatartips.style.display = 'block'
     },
-    getOrigin (first, second) {
+    getOrigin(first, second) {
       return {
         x: (first.x + second.x) / 2,
         y: (first.y + second.y) / 2,
@@ -704,8 +748,8 @@ function AvatarUpload (options) {
      * @param  {Object} stop  [触点2]
      * @return {Number}       [比例距离]
      */
-    getDistance (start, stop) {
-      return Math.sqrt(Math.pow((stop.x - start.x), 2) + Math.pow((stop.y - start.y), 2))
+    getDistance(start, stop) {
+      return Math.sqrt(Math.pow(stop.x - start.x, 2) + Math.pow(stop.y - start.y, 2))
     },
     /**
      * [getScale description]
@@ -713,7 +757,7 @@ function AvatarUpload (options) {
      * @param  {Object} stop  [触点2]
      * @return {Number}       [缩放比例]
      */
-    getScale (start, stop) {
+    getScale(start, stop) {
       return this.getDistance(start[0], start[1]) / this.getDistance(stop[0], stop[1])
     },
   }
@@ -721,9 +765,9 @@ function AvatarUpload (options) {
   recordObject = new CreateAvatar(options)
 }
 
-function setAjax (obj) {
+function setAjax(obj) {
   const data = obj.data || ''
-  const fn = obj.callback || function () { }
+  const fn = obj.callback || function () {}
   const method = obj.method || 'get'
   const type = obj.type || 'json'
   const url = obj.url || ''
@@ -747,13 +791,13 @@ function setAjax (obj) {
   xmlhttp.send(method === 'post' ? JSON.stringify(data) : '')
 }
 
-(function () {
+;(function () {
   const doScroll = document.documentElement.doScroll || false
   const triggerEvent = doScroll ? 'onreadystatechange' : 'DOMContentLoaded'
 
   let _timer = null
   let _ready = false
-  let readyChangeHandler = function () { }
+  let readyChangeHandler = function () {}
 
   const add = function (el, type, fn, capture) {
     if (el && el.addEventListener) {
@@ -777,7 +821,7 @@ function setAjax (obj) {
 
   const _readyhandler = function () {
     AvatarUpload({
-      callback (data) {
+      callback(data) {
         // 只把图片展示出来，回传服务器之类的自己加吧~
         const avatarcure = document.querySelector('.avatar-cure')
         if (avatarcure) {
@@ -820,4 +864,4 @@ function setAjax (obj) {
     }
     add(document, triggerEvent, readyChangeHandler)
   }
-}())
+})()

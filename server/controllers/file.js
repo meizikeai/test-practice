@@ -1,17 +1,10 @@
 const path = require('path')
-const {
-  copyFiles,
-  folderState,
-  getChunkFiles,
-  getFileExt,
-  matchFileType,
-  mergeFiles,
-} = require('../libs/upload')
+const { copyFiles, folderState, getChunkFiles, getFileExt, matchFileType, mergeFiles } = require('../libs/upload')
 
 const paths = '../../public/upload'
 
 module.exports = {
-  async home (ctx, next) {
+  async home(ctx, next) {
     const result = {
       title: 'upload file',
     }
@@ -24,7 +17,7 @@ module.exports = {
     await next()
   },
 
-  async checkFile (ctx) {
+  async checkFile(ctx) {
     const { type, token } = ctx.query
     const fileType = matchFileType(type)
 
@@ -46,7 +39,7 @@ module.exports = {
     ctx.body = result
   },
 
-  async uploadFile (ctx) {
+  async uploadFile(ctx) {
     const result = {
       code: 400,
     }
@@ -70,7 +63,7 @@ module.exports = {
     }
   },
 
-  async mergeFile (ctx) {
+  async mergeFile(ctx) {
     try {
       const result = { code: 400 }
       const { type, token } = ctx.query
