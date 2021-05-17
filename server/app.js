@@ -25,7 +25,7 @@ global.TestPractice = {}
 // logger
 app.use(
   logger({
-    appName: 'koa-practice',
+    appName: 'test-practice',
   })
 )
 
